@@ -186,14 +186,7 @@ export function Hero() {
   }, [vibe])
 
   const getCtaText = () => {
-    if (showInviteButton) return "Accept Invitation"
-    if (applicationStatus === 'approved') return "We're excited to have you join!"
-    if (applicationStatus === 'pending') return "Check status"
-    return "I'd like to join"
-  }
-
-  const getCtaLink = () => {
-    return '/events/ados-2025'
+    return "Next event coming soon"
   }
 
   const content = {
@@ -429,13 +422,13 @@ export function Hero() {
             </motion.p>
             
             <div className="flex flex-col gap-5 items-center w-full">
-              <Link 
-                href={inviteName ? `/events/ados-2025/apply?invite=${searchParams.get('invite')}` : getCtaLink()}
+              <Button 
+                size="lg" 
+                className={`min-w-[200px] cursor-default ${vibe === 'epic' ? 'hover:bg-yellow-50' : 'hover:bg-gray-800'}`} 
+                isDark={vibe === 'epic'}
               >
-                <Button size="lg" className="min-w-[200px]" isDark={vibe === 'epic'}>
-                  {content[vibe].cta}
-                </Button>
-              </Link>
+                {content[vibe].cta}
+              </Button>
               
               {/* Hide on desktop, show on mobile */}
               <button
@@ -667,35 +660,20 @@ export function Hero() {
                 </motion.p>
 
             <div className="flex flex-col gap-5 items-center lg:items-start w-full">
-            <Link 
-              href={inviteName ? `/events/ados-2025/apply?invite=${searchParams.get('invite')}` : getCtaLink()}
-              onMouseEnter={() => {
-                router.prefetch('/events/ados-2025')
-              }}
-            >
               <motion.div
-                key={`cta-${vibe}-${inviteName ? 'invite' : 'normal'}`}
+                key={`cta-${vibe}`}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.3 }}
               >
-                <motion.div
-                  animate={showInviteButton ? {
-                    scale: [1, 1.05, 1],
-                    boxShadow: [
-                      'none',
-                        vibe === 'epic' ? '0 0 20px rgba(251,191,36,0.5)' : '0 0 20px rgba(255,255,255,0.3)',
-                      'none'
-                    ]
-                  } : {}}
-                  transition={{ duration: 0.6 }}
+                <Button 
+                  size="lg" 
+                  className={`min-w-[200px] cursor-default ${vibe === 'epic' ? 'hover:bg-yellow-50' : 'hover:bg-gray-800'}`} 
+                  isDark={vibe === 'epic'}
                 >
-                  <Button size="lg" className="min-w-[200px]" isDark={vibe === 'epic'}>
-                    {content[vibe].cta}
-                  </Button>
-                </motion.div>
+                  {content[vibe].cta}
+                </Button>
               </motion.div>
-            </Link>
             
               {/* Hide on desktop, show on mobile */}
                 <motion.button

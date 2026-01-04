@@ -5,7 +5,17 @@ nixPkgs = ['nodejs_20']
 cmds = ['npm ci']
 
 [phases.build]
-cmds = ['npm run build']
+cmds = [
+  'echo "=== DEBUG: Listing lib and components directories ==="',
+  'ls -la lib/ || echo "lib/ not found"',
+  'ls -la lib/supabase/ || echo "lib/supabase/ not found"',
+  'ls -la components/ || echo "components/ not found"',
+  'ls -la components/ui/ || echo "components/ui/ not found"',
+  'echo "=== DEBUG: Checking tsconfig.json ==="',
+  'cat tsconfig.json',
+  'echo "=== DEBUG: Starting build ==="',
+  'npm run build'
+]
 
 [start]
 cmd = 'npm run start'

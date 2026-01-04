@@ -39,15 +39,18 @@ export default function AdminPage() {
   useEffect(() => {
     if (!supabase) return
     
+    // Capture non-null supabase for TypeScript
+    const client = supabase
+    
     async function checkAdmin() {
-      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { user } } = await client.auth.getUser()
       
       if (!user) {
         router.push('/')
         return
       }
 
-      const { data: profile } = await supabase
+      const { data: profile } = await client
         .from('profiles')
         .select('role')
         .eq('id', user.id)
@@ -70,6 +73,7 @@ export default function AdminPage() {
   }, [router, supabase])
 
   const loadInvites = async () => {
+    if (!supabase) return
     const { data, error } = await supabase
       .from('invites')
       .select('*')
@@ -81,6 +85,7 @@ export default function AdminPage() {
   }
 
   const loadAttendees = async () => {
+    if (!supabase) return
     const { data, error } = await supabase
       .from('attendance')
       .select(`
@@ -109,6 +114,7 @@ export default function AdminPage() {
   }
 
   const updateAttendeeStatus = async (attendanceId: string, newStatus: 'approved' | 'rejected' | 'pending') => {
+    if (!supabase) return
     setUpdatingStatus(attendanceId)
     
     try {
@@ -169,6 +175,7 @@ export default function AdminPage() {
         inviteData.discord_id = discordId.trim()
       }
       
+      if (!supabase) return
       const { error: inviteError } = await supabase
         .from('invites')
         .insert(inviteData)
@@ -222,6 +229,7 @@ export default function AdminPage() {
 
   const handleBulkSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!supabase) return
     setIsBulkSubmitting(true)
     setBulkResults([])
 

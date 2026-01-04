@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/Button'
@@ -10,7 +10,11 @@ import Link from 'next/link'
 
 export default function AdminPage() {
   const router = useRouter()
-  const supabase = createClient()
+  // Create client lazily to avoid issues during SSR/prerendering
+  const supabase = useMemo(() => {
+    if (typeof window === 'undefined') return null
+    return createClient()
+  }, [])
   const [isAdmin, setIsAdmin] = useState(false)
   const [loading, setLoading] = useState(true)
   const [name, setName] = useState('')
@@ -33,6 +37,8 @@ export default function AdminPage() {
   const [activeTab, setActiveTab] = useState<'invites' | 'attendees'>('attendees')
 
   useEffect(() => {
+    if (!supabase) return
+    
     async function checkAdmin() {
       const { data: { user } } = await supabase.auth.getUser()
       

@@ -4,11 +4,24 @@ import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
-// Log environment at build time
-console.log('🔧 Layout - NEXT_PUBLIC_APP_URL at build/load:', process.env.NEXT_PUBLIC_APP_URL)
+// Helper to safely parse URL with fallback
+function getMetadataBase(): URL {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL
+  // Must be a non-empty string that looks like a URL (starts with http)
+  if (appUrl && typeof appUrl === 'string' && appUrl.startsWith('http')) {
+    try {
+      return new URL(appUrl)
+    } catch (e) {
+      // Log the error but don't crash
+      console.warn(`Invalid NEXT_PUBLIC_APP_URL: "${appUrl}", falling back to localhost`)
+    }
+  }
+  // Always fallback to localhost if anything is wrong
+  return new URL('http://localhost:3000')
+}
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
+  metadataBase: getMetadataBase(),
   title: 'ADOS - Los Angeles | November 7th',
   description: 'A celebration of art and open-source AI',
   icons: {

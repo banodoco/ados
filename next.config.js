@@ -10,6 +10,8 @@ Object.keys(process.env)
   .forEach(key => console.log(`   ${key}:`, process.env[key]))
 console.log('========================================')
 
+const path = require('path')
+
 const nextConfig = {
   images: {
     remotePatterns: [
@@ -22,6 +24,10 @@ const nextConfig = {
         hostname: '*.supabase.co',
       },
     ],
+  },
+  webpack: (config) => {
+    config.resolve.alias['@'] = path.resolve(__dirname)
+    return config
   },
 }
 
